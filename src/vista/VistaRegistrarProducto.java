@@ -8,12 +8,16 @@ import javax.swing.JButton;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
+import java.awt.Component;
+import javax.swing.JTable;
 
 @SuppressWarnings("serial")
 public class VistaRegistrarProducto extends JPanel implements ActionListener{
 	private JLabel datoRegistroProductos;
 	private JButton botonNuevoProducto;
 	private RegistroProducto registroProducto;
+	private JTable datosGrupo;
 
 	public VistaRegistrarProducto() {
 		setLayout(new BorderLayout(0, 0));
@@ -38,6 +42,10 @@ public class VistaRegistrarProducto extends JPanel implements ActionListener{
 		
 		JPanel panel_3 = new JPanel();
 		panel_1.add(panel_3, BorderLayout.CENTER);
+		
+		datosGrupo = new JTable();
+		JScrollPane panelTabla = new JScrollPane(datosGrupo);
+		panel_3.add(panelTabla, BorderLayout.CENTER);
 		
 	}
 

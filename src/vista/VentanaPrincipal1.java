@@ -47,13 +47,13 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setLocationRelativeTo(null);
 
-		baseDatos = new BaseDatos("tiendita", "root", "17650010");
+		/*baseDatos = new BaseDatos("tiendita", "root", "17650010");
 		baseDatos.setDriver("com.mysql.jdbc.Driver");
 		baseDatos.setProtocolo("jdbc:mysql://localhost/");
 
 		baseDatos.hacerConexion();
 		tablaProducto = new TablaProducto(baseDatos.getConexion());
-		tablaEmpleado = new TablaEmpleado(baseDatos.getConexion());
+		tablaEmpleado = new TablaEmpleado(baseDatos.getConexion());*/
 		
 		inicio = new VentanaInicioSesion();
 		inicio.getBotonNuevoUsuario().addActionListener(this);
@@ -70,7 +70,8 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 		}
 		
 		if(e.getSource() == inicio.getBotonSesion()) {
-			
+			contentPane.removeAll();
+			setExtendedState(MAXIMIZED_BOTH);
 		}
 	}
 

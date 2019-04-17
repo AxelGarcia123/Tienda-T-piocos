@@ -9,7 +9,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import modelo.BaseDatos;
-import modelo.Libro;
 import modelo.Producto;
 import modelo.TablaEmpleado;
 import modelo.TablaProducto;
@@ -143,7 +142,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 		}
 	}
 	
-	public void mostrarConsulta(List<Producto> productos) {
+	/*public void mostrarConsulta(List<Producto> productos) {
 		String[] titulos = {"C\u00f3digo de Barras", "Nombre", "Tipo", "Contenido",
 				"Unidad de Medida", "Presentaci\u00f3n", "Marca", "Precio de venta"};
 
@@ -155,7 +154,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 			modelo.addRow(tupla);
 		}
 		datosGrupo.setModel(modelo);
-	}
+	}*/
 	
 	public TablaProducto getTablaProducto() {
 		return tablaProducto;
