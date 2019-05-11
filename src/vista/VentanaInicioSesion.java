@@ -3,6 +3,8 @@ package vista;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -79,6 +81,7 @@ public class VentanaInicioSesion extends JPanel implements ActionListener{
 		panel_4.add(label_2);
 		
 		editNombreUsuario = new JTextField();
+		editNombreUsuario.addActionListener(this);
 		editNombreUsuario.setBounds(25, 78, 211, 39);
 		editNombreUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		editNombreUsuario.setForeground(Color.WHITE);
@@ -97,6 +100,7 @@ public class VentanaInicioSesion extends JPanel implements ActionListener{
 		panel_4.add(label_3);
 		
 		editPassword = new JPasswordField();
+		editPassword.addActionListener(this);
 		editPassword.setBounds(25, 177, 211, 39);
 		editPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		editPassword.setForeground(Color.WHITE);
@@ -119,7 +123,27 @@ public class VentanaInicioSesion extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == editNombreUsuario) {
+			if(editNombreUsuario.getText().isEmpty()) {
+				editNombreUsuario.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(213, 0, 0)));
+				JOptionPane.showMessageDialog(null, "El campo \"Nombre\" no puede quedar vacio.", null, JOptionPane.ERROR_MESSAGE);
+			}
+			else {
+				editNombreUsuario.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(1, 87, 115)));
+				editPassword.requestFocus();
+			}
+		}
 		
+		if(e.getSource() == editPassword) {
+			if(editPassword.getText().isEmpty()) {
+				editPassword.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(213, 0, 0)));
+				JOptionPane.showMessageDialog(null, "El campo \"Nombre\" no puede quedar vacio.", null, JOptionPane.ERROR_MESSAGE);
+			}
+			else {
+				editPassword.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(1, 87, 115)));
+				botonInicioSesion.requestFocus();
+			}
+		}
 	}
 	
 	public JButton getBotonSesion() {
@@ -128,5 +152,25 @@ public class VentanaInicioSesion extends JPanel implements ActionListener{
 	
 	public JButton getBotonNuevoUsuario() {
 		return botonNuevoUsuario;
+	}
+	
+	public String getPassword() {
+		return editPassword.getText();
+	}
+	
+	public JTextField getNombreUsuario() {
+		return editNombreUsuario;
+	}
+	
+	public void enfocar() {
+		editNombreUsuario.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(213, 0, 0)));
+		editNombreUsuario.setText(null);
+		editNombreUsuario.requestFocus();
+	}
+	
+	public void enfocarPassword() {
+		editPassword.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(213, 0, 0)));
+		editPassword.setText(null);
+		editPassword.requestFocus();
 	}
 }

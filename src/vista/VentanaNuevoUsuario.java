@@ -17,6 +17,8 @@ import javax.swing.JPasswordField;
 import javax.swing.border.MatteBorder;
 
 import modelo.Empleado;
+import modelo.Registro;
+import modelo.TablaEmpleado;
 
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -33,6 +35,7 @@ public class VentanaNuevoUsuario extends JPanel implements ActionListener{
 	private String password = "";
 	private JComboBox<String> editEmpleadoAdmin;
 	private JTextField editMaterno;
+	private JTextField editNombreUsuario;
 
 	public VentanaNuevoUsuario() {
 		setLayout(new BorderLayout(0, 0));
@@ -66,7 +69,7 @@ public class VentanaNuevoUsuario extends JPanel implements ActionListener{
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(new Color(0, 60, 64));
 		add(panel_2, BorderLayout.CENTER);
-		panel_2.setLayout(new GridLayout(7, 2, 0, 20));
+		panel_2.setLayout(new GridLayout(8, 2, 0, 20));
 		
 		JLabel lblNombre = new JLabel("NOMBRE(S)");
 		lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
@@ -135,6 +138,23 @@ public class VentanaNuevoUsuario extends JPanel implements ActionListener{
 		editCorreo.setForeground(Color.WHITE);
 		panel_2.add(editCorreo);
 		editCorreo.setColumns(10);
+		
+		JLabel lbUsuario = new JLabel("NOMBRE DE USUARIO");
+		lbUsuario.setHorizontalAlignment(SwingConstants.CENTER);
+		lbUsuario.setForeground(Color.WHITE);
+		lbUsuario.setFont(new Font("Roboto", Font.PLAIN, 15));
+		panel_2.add(lbUsuario);
+		
+		editNombreUsuario = new JTextField();
+		editNombreUsuario.addActionListener(this);
+		editNombreUsuario.setHorizontalAlignment(SwingConstants.CENTER);
+		editNombreUsuario.setForeground(Color.WHITE);
+		editNombreUsuario.setFont(new Font("Roboto", Font.PLAIN, 14));
+		editNombreUsuario.setColumns(10);
+		editNombreUsuario.setCaretColor(Color.WHITE);
+		editNombreUsuario.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(1, 87, 115)));
+		editNombreUsuario.setBackground(new Color(0, 60, 64));
+		panel_2.add(editNombreUsuario);
 		
 		JLabel lblContrasea = new JLabel("CONTRASE\u00D1A");
 		lblContrasea.setForeground(Color.WHITE);
@@ -220,6 +240,17 @@ public class VentanaNuevoUsuario extends JPanel implements ActionListener{
 			}
 			else {
 				editCorreo.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(1, 87, 115)));
+				editNombreUsuario.requestFocus();
+			}
+		}
+		
+		if(e.getSource() == editNombreUsuario) {
+			if(editNombreUsuario.getText().isEmpty()) {
+				editNombreUsuario.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(213, 0, 0)));
+				JOptionPane.showMessageDialog(null, "El campo \"Nombre de Usuario\" no puede quedar vacio.", null, JOptionPane.ERROR_MESSAGE);
+			}
+			else {
+				editNombreUsuario.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(1, 87, 115)));
 				editPassword.requestFocus();
 			}
 		}
@@ -267,6 +298,15 @@ public class VentanaNuevoUsuario extends JPanel implements ActionListener{
 		return empleado;
 	}
 	
+	public Registro getRegistro(TablaEmpleado empleado) {
+		Registro registro = new Registro();
+		registro.setNombreUsuario(editNombreUsuario.getText());
+		registro.setCorreoElectronico(editCorreo.getText());
+		registro.setPassword(editPassword.getText());
+		registro.setClaveEmpleado(empleado.getCodigoEmpleado(editNombre.getText()));
+		return registro;
+	}
+	
 	public boolean camposVacios() {
 		return editNombre.getText().isEmpty() || editPaterno.getText().isEmpty() || editMaterno.getText().isEmpty()
 				|| editCorreo.getText().isEmpty() || editPassword.getText().isEmpty() || editPassword2.getText().isEmpty();
@@ -282,5 +322,14 @@ public class VentanaNuevoUsuario extends JPanel implements ActionListener{
 	
 	public void enfocarCursor() {
 		editNombre.requestFocus();
+	}
+	
+	public String getNombreUsuario() {
+		return editNombreUsuario.getText();
+	}
+	
+	public void limpiarNombre() {
+		editNombreUsuario.setText(null);
+		editNombreUsuario.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(213, 0, 0)));
 	}
 }

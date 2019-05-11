@@ -1,5 +1,6 @@
 package modelo;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,14 +35,14 @@ public class TablaProducto {
 		}
 	}
 	
-	public List<Producto> getProducto(){
+	public List<Producto> getProductos(){
 		String sql = "select * from producto";
 		try {
 			ResultSet rs = statement.executeQuery(sql);
 			List<Producto> productos = new ArrayList<>();
 			while (rs.next()) {
 				Producto producto = new Producto();
-				producto.setCodigoBarras(Integer.parseInt(rs.getString("codbar_pro")));
+				producto.setCodigoBarras(new BigInteger(rs.getString("codbar_pro")));
 				producto.setNombre(rs.getString("nom_pro"));
 				producto.setTipo(rs.getString("tipo_pro"));
 				producto.setContenido(rs.getString("contenido_pro"));
@@ -55,6 +56,67 @@ public class TablaProducto {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 			return null;
+		}
+	}
+	
+	public String nombreProducto(BigInteger codigo) {
+		String sql = "select nom_pro from producto where codbar_pro='"+ codigo + "'";
+		try {
+			ResultSet rs = statement.executeQuery(sql);
+			if (rs.next()) {
+				return rs.getString("nom_pro");
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			return null;
+		}
+	}
+	
+	public BigInteger getCodigoBarras(String nombre) {
+		String sql = "select codbar_pro from producto where nom_pro='"+ nombre + "'";
+		try {
+			ResultSet rs = statement.executeQuery(sql);
+			if (rs.next()) {
+				BigInteger numeroGrande = BigInteger.valueOf(rs.getLong("codbar_pro"));
+				return numeroGrande;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			System.out.println("Error en getCodigoBarras" +e.toString());
+			return null;
+		}
+	}
+	
+	public int getPrecio(String nombre) {
+		String sql = "select pventa_pro from producto where nom_pro='"+ nombre + "'";
+		try {
+			ResultSet rs = statement.executeQuery(sql);
+			if (rs.next()) {
+				return rs.getInt("pventa_pro");
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			System.out.println("Error en getCodigoBarras" +e.toString());
+			return 0;
+		}
+	}
+	
+	public boolean existe(String nombreProducto) {
+		String sql = "select * from producto where nom_pro='"+ nombreProducto + "'";
+		try {
+			ResultSet rs = statement.executeQuery(sql);
+			if (rs.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			return false;
 		}
 	}
 }

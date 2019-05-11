@@ -13,7 +13,7 @@ public class Principal {
 
 		if (baseDatos.hacerConexion().equals("exito")) {
 			Producto producto = new Producto();
-			producto.setCodigoBarras(123);
+			//producto.setCodigoBarras(123);
 			producto.setNombre("sdf");
 			producto.setTipo("sdf");
 			producto.setContenido("sdf");

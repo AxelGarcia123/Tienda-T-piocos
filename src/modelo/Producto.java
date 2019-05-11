@@ -1,7 +1,9 @@
 package modelo;
 
+import java.math.BigInteger;
+
 public class Producto {
-	private int codigoBarras;
+	private BigInteger codigoBarras;
 	private String nombre;
 	private String tipo;
 	private String contenido;
@@ -10,10 +12,10 @@ public class Producto {
 	private String marca;
 	private double precioVenta;
 	
-	public int getCodigoBarras() {
+	public BigInteger getCodigoBarras() {
 		return codigoBarras;
 	}
-	public void setCodigoBarras(int codigoBarras) {
+	public void setCodigoBarras(BigInteger codigoBarras) {
 		this.codigoBarras = codigoBarras;
 	}
 	public String getNombre() {
