@@ -35,7 +35,7 @@ public class TablaRenglonTicket {
 	}
 	
 	public List<DatosRenglonTicket> getDatos(){
-		String sql = "select nom_pro, cant_rentic, pventa_pro, fecha_tic, total_tic, nombre_emp from ticket t "
+		String sql = "select t.folio_tic, nom_pro, cant_rentic, pventa_pro, fecha_tic, total_tic, nombre_emp from ticket t "
 				+ "join renglonticket rt on t.folio_tic = rt.folio_tic join producto p on rt.codbar_pro = p.codbar_pro "
 				+ "join empleado e on rt.cve_emp = e.cve_emp where fecha_tic = curdate()";
 		try {
@@ -49,6 +49,7 @@ public class TablaRenglonTicket {
 				dato.setFechaVenta(rs.getDate("fecha_tic"));
 				dato.setTotalVenta(rs.getFloat("total_tic"));
 				dato.setNombreEmpleado(rs.getString("nombre_emp"));
+				dato.setNumeroTicket(rs.getInt("folio_tic"));
 				datos.add(dato);
 			}
 			return datos;

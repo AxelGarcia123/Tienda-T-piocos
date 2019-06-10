@@ -101,7 +101,7 @@ public class TablaResurtir {
 		}
 	}
 	
-	public int getCantidad(BigInteger codigo) {
+	public int cantidad(BigInteger codigo) {
 		String sql = "select cant_res from resurtir where codbar_pro='"+ codigo + "'";
 		try {
 			ResultSet rs = statement.executeQuery(sql);
@@ -113,15 +113,6 @@ public class TablaResurtir {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 			return 0;
-		}
-	}
-	
-	public void actualizar(int datoNuevo, int datoViejo, BigInteger codigo) {
-		String sql = "update resurtir set cant_res ='"+ datoNuevo +"' where codbar_pro ='"+ codigo +"' and cant_res ='"+ datoViejo +"'";
-		try {
-			statement.executeUpdate(sql);
-		} catch (Exception e) {
-			System.out.println(e.toString());
 		}
 	}
 }

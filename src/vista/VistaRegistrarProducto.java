@@ -17,10 +17,10 @@ import javax.swing.table.DefaultTableModel;
 import modelo.Producto;
 import java.awt.Font;
 import java.awt.Color;
+import javax.swing.SwingConstants;
 
 @SuppressWarnings("serial")
 public class VistaRegistrarProducto extends JPanel implements ActionListener{
-	private JButton botonNuevoProducto;
 	private RegistroProducto registroProducto;
 	private JTable datosProducto;
 
@@ -32,27 +32,18 @@ public class VistaRegistrarProducto extends JPanel implements ActionListener{
 		panel_1.setLayout(new BorderLayout(0, 0));
 
 		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(new Color(158, 38, 182));
 		panel_1.add(panel_2, BorderLayout.NORTH);
-		panel_2.setLayout(new GridLayout(3, 4, 1000, 0));
-
-		JLabel label = new JLabel("");
+		panel_2.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JLabel label = new JLabel("Lista de Productos");
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setForeground(Color.WHITE);
+		label.setFont(new Font("Roboto", Font.PLAIN, 20));
 		panel_2.add(label);
 
-		JLabel label_1 = new JLabel("");
-		panel_2.add(label_1);
-
-		botonNuevoProducto = new JButton("Nuevo Producto");
-		botonNuevoProducto.setBackground(new Color(0, 112, 192));
-		botonNuevoProducto.setForeground(Color.WHITE);
-		botonNuevoProducto.setFont(new Font("Roboto", Font.PLAIN, 15));
-		botonNuevoProducto.addActionListener(this);
-		panel_2.add(botonNuevoProducto);
-
-		JLabel label_2 = new JLabel("");
-		panel_2.add(label_2);
-
 		datosProducto = new JTable();
-		datosProducto.setFont(new Font("Roboto", Font.PLAIN, 11));
+		datosProducto.setFont(new Font("Roboto", Font.PLAIN, 15));
 		JScrollPane panelTabla = new JScrollPane(datosProducto);
 		panel_1.add(panelTabla, BorderLayout.CENTER);
 
@@ -75,9 +66,5 @@ public class VistaRegistrarProducto extends JPanel implements ActionListener{
 			modelo.addRow(tupla);
 		}
 		datosProducto.setModel(modelo);
-	}
-
-	public JButton getButton() {
-		return botonNuevoProducto;
 	}
 }

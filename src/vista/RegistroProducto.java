@@ -20,6 +20,8 @@ import java.math.BigInteger;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class RegistroProducto extends JFrame implements ActionListener{
 
@@ -34,6 +36,8 @@ public class RegistroProducto extends JFrame implements ActionListener{
 	private JTextField editPrecioVenta;
 	private JButton botonRegistrar;
 	private JButton botonCancelar;
+	private JSpinner editCantidadMinima;
+	private JSpinner editCantidadMaxima;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -50,7 +54,7 @@ public class RegistroProducto extends JFrame implements ActionListener{
 
 	public RegistroProducto() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 394, 502);
+		setBounds(100, 100, 500, 550);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -58,7 +62,7 @@ public class RegistroProducto extends JFrame implements ActionListener{
 		setLocationRelativeTo(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(0, 112, 192));
+		panel.setBackground(new Color(158, 38, 182));
 		contentPane.add(panel, BorderLayout.NORTH);
 		
 		JLabel lblNuevoProducto = new JLabel("Nuevo Producto");
@@ -68,14 +72,14 @@ public class RegistroProducto extends JFrame implements ActionListener{
 		
 		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.CENTER);
-		panel_1.setLayout(new GridLayout(8, 2, 0, 20));
+		panel_1.setLayout(new GridLayout(10, 2, 0, 20));
 		
 		JLabel lblCdigoDeBarras = new JLabel("C\u00F3digo de barras");
 		lblCdigoDeBarras.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_1.add(lblCdigoDeBarras);
 		
 		editCodigoBarras = new JTextField();
-		editCodigoBarras.setBorder(new LineBorder(new Color(0, 112, 192), 1));
+		editCodigoBarras.setBorder(new LineBorder(new Color(158, 38, 182), 1));
 		editCodigoBarras.setHorizontalAlignment(SwingConstants.CENTER);
 		editCodigoBarras.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_1.add(editCodigoBarras);
@@ -86,7 +90,7 @@ public class RegistroProducto extends JFrame implements ActionListener{
 		panel_1.add(lblNombreDelProducto);
 		
 		editNombreProducto = new JTextField();
-		editNombreProducto.setBorder(new LineBorder(new Color(0, 112, 192), 1));
+		editNombreProducto.setBorder(new LineBorder(new Color(158, 38, 182), 1));
 		editNombreProducto.setHorizontalAlignment(SwingConstants.CENTER);
 		editNombreProducto.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_1.add(editNombreProducto);
@@ -97,7 +101,7 @@ public class RegistroProducto extends JFrame implements ActionListener{
 		panel_1.add(lblTipoDeProducto);
 		
 		editTipoProducto = new JTextField();
-		editTipoProducto.setBorder(new LineBorder(new Color(0, 112, 192), 1));
+		editTipoProducto.setBorder(new LineBorder(new Color(158, 38, 182), 1));
 		editTipoProducto.setHorizontalAlignment(SwingConstants.CENTER);
 		editTipoProducto.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_1.add(editTipoProducto);
@@ -108,7 +112,7 @@ public class RegistroProducto extends JFrame implements ActionListener{
 		panel_1.add(lblContenido);
 		
 		editContenidoProducto = new JTextField();
-		editContenidoProducto.setBorder(new LineBorder(new Color(0, 112, 192), 1));
+		editContenidoProducto.setBorder(new LineBorder(new Color(158, 38, 182), 1));
 		editContenidoProducto.setHorizontalAlignment(SwingConstants.CENTER);
 		editContenidoProducto.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_1.add(editContenidoProducto);
@@ -119,7 +123,7 @@ public class RegistroProducto extends JFrame implements ActionListener{
 		panel_1.add(lblUnidadDeMedida);
 		
 		editUnidadMedida = new JTextField();
-		editUnidadMedida.setBorder(new LineBorder(new Color(0, 112, 192), 1));
+		editUnidadMedida.setBorder(new LineBorder(new Color(158, 38, 182), 1));
 		editUnidadMedida.setHorizontalAlignment(SwingConstants.CENTER);
 		editUnidadMedida.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_1.add(editUnidadMedida);
@@ -130,7 +134,7 @@ public class RegistroProducto extends JFrame implements ActionListener{
 		panel_1.add(lblPresentacin);
 		
 		editPresentacion = new JTextField();
-		editPresentacion.setBorder(new LineBorder(new Color(0, 112, 192), 1));
+		editPresentacion.setBorder(new LineBorder(new Color(158, 38, 182), 1));
 		editPresentacion.setHorizontalAlignment(SwingConstants.CENTER);
 		editPresentacion.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_1.add(editPresentacion);
@@ -141,7 +145,7 @@ public class RegistroProducto extends JFrame implements ActionListener{
 		panel_1.add(lblMarca);
 		
 		editMarca = new JTextField();
-		editMarca.setBorder(new LineBorder(new Color(0, 112, 192), 1));
+		editMarca.setBorder(new LineBorder(new Color(158, 38, 182), 1));
 		editMarca.setHorizontalAlignment(SwingConstants.CENTER);
 		editMarca.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_1.add(editMarca);
@@ -152,23 +156,41 @@ public class RegistroProducto extends JFrame implements ActionListener{
 		panel_1.add(lblPrecioDeVenta);
 		
 		editPrecioVenta = new JTextField();
-		editPrecioVenta.setBorder(new LineBorder(new Color(0, 112, 192), 1));
+		editPrecioVenta.setBorder(new LineBorder(new Color(158, 38, 182), 1));
 		editPrecioVenta.setHorizontalAlignment(SwingConstants.CENTER);
 		editPrecioVenta.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_1.add(editPrecioVenta);
 		editPrecioVenta.setColumns(10);
 		
+		JLabel lblCantidadMnima = new JLabel("Cantidad M\u00EDnima");
+		lblCantidadMnima.setFont(new Font("Roboto", Font.PLAIN, 15));
+		panel_1.add(lblCantidadMnima);
+		
+		editCantidadMinima = new JSpinner();
+		editCantidadMinima.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+		editCantidadMinima.setFont(new Font("Roboto", Font.PLAIN, 15));
+		panel_1.add(editCantidadMinima);
+		
+		JLabel lblCantidadMxima = new JLabel("Cantidad M\u00E1xima");
+		lblCantidadMxima.setFont(new Font("Roboto", Font.PLAIN, 15));
+		panel_1.add(lblCantidadMxima);
+		
+		editCantidadMaxima = new JSpinner();
+		editCantidadMaxima.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+		editCantidadMaxima.setFont(new Font("Roboto", Font.PLAIN, 15));
+		panel_1.add(editCantidadMaxima);
+		
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.SOUTH);
 		
 		botonRegistrar = new JButton("Registrar");
-		botonRegistrar.setBackground(new Color(0, 112, 192));
+		botonRegistrar.setBackground(new Color(158, 38, 182));
 		botonRegistrar.setForeground(Color.WHITE);
 		botonRegistrar.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_2.add(botonRegistrar);
 		
 		botonCancelar = new JButton("Cancelar");
-		botonCancelar.setBackground(new Color(0, 112, 192));
+		botonCancelar.setBackground(new Color(158, 38, 182));
 		botonCancelar.setForeground(Color.WHITE);
 		botonCancelar.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_2.add(botonCancelar);
@@ -189,6 +211,11 @@ public class RegistroProducto extends JFrame implements ActionListener{
 		producto.setPresentacion(editPresentacion.getText());
 		producto.setMarca(editMarca.getText());
 		producto.setPrecioVenta(Double.parseDouble(editPrecioVenta.getText()));
+		int min = (int) editCantidadMinima.getValue();
+		int max = (int) editCantidadMaxima.getValue();
+		producto.setCantidadMinima(min);
+		producto.setCantidadMaxima(max);
+		producto.setDisponible(0);
 		
 		return producto;
 	}

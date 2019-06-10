@@ -9,7 +9,16 @@ public class DatosRenglonTicket {
 	private Date fechaVenta;
 	private float totalVenta;
 	private String nombreEmpleado;
+	private int numeroTicket;
 	
+	public int getNumeroTicket() {
+		return numeroTicket;
+	}
+
+	public void setNumeroTicket(int numeroTicket) {
+		this.numeroTicket = numeroTicket;
+	}
+
 	public DatosRenglonTicket() {
 		
 	}

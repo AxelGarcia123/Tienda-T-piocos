@@ -1,33 +1,26 @@
 package pruebas;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+
 import modelo.BaseDatos;
 import modelo.Producto;
 import modelo.TablaProducto;
 
 public class Principal {
 
-	public static void main(String[] args) {
-		BaseDatos baseDatos = new BaseDatos("tiendita", "root", "17650010");
-		baseDatos.setDriver("com.mysql.jdbc.Driver");
-		baseDatos.setProtocolo("jdbc:mysql://localhost/");
-
-		if (baseDatos.hacerConexion().equals("exito")) {
-			Producto producto = new Producto();
-			//producto.setCodigoBarras(123);
-			producto.setNombre("sdf");
-			producto.setTipo("sdf");
-			producto.setContenido("sdf");
-			producto.setUnidad("sdf");
-			producto.setPresentacion("sdf");
-			producto.setMarca("sdf");
-			producto.setPrecioVenta(3.5);
-			
-			TablaProducto tabla = new TablaProducto(baseDatos.getConexion());
-			tabla.guardar(producto);
-			System.out.println("Conexion exitosa");
-		}
-		
-		else 
-			System.out.println("error de coneccion");
+	public static void main(String[] args) throws FileNotFoundException {
+		PdfWriter writer = new PdfWriter("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\Ticket.pdf");
+		PdfDocument document = new PdfDocument(writer);
+		// Se crea el documento
+		Document documento = new Document();
+		documento.add(new Paragraph("Hola mundo"));
+		documento.close();
+		System.out.println("Correcto");
 	}
 }

@@ -8,8 +8,6 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import javax.swing.JTextField;
-import javax.swing.JSlider;
-import javax.swing.JToggleButton;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
@@ -24,18 +22,28 @@ import java.util.List;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.text.Document;
+import com.itextpdf.layout.element.Paragraph;
+
 import modelo.Compra;
-import modelo.Resurtir;
+import modelo.Producto;
+import modelo.RenglonTicket;
 import modelo.TablaProducto;
 import modelo.Ticket;
 
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.JComboBox;
 
 public class VentanaVenta extends JPanel implements ActionListener {
-	private JTextField editProducto;
 	private JButton botonComprar;
 	private JLabel datoEmpleado;
 	private JLabel datoFecha;
@@ -44,11 +52,15 @@ public class VentanaVenta extends JPanel implements ActionListener {
 	private JTextField editRecibido;
 	private JLabel datoCambio;
 	private JTable tablaCompras;
-	private JTextField editCantidad;
 	private JButton botonAgregar;
 	private List<Compra> compras;
 	private float total = 0;
 	private JButton botonCancelar;
+	private JSpinner cantidadProducto;
+	private JPanel panel_4;
+	private JButton btnEliminarCompra;
+	private JComboBox<String> editProducto;
+	
 
 	public VentanaVenta() {
 		setLayout(new BorderLayout(0, 0));
@@ -60,25 +72,20 @@ public class VentanaVenta extends JPanel implements ActionListener {
 		JLabel lblProducto = new JLabel("Producto:");
 		lblProducto.setFont(new Font("Roboto", Font.PLAIN, 18));
 		panel.add(lblProducto);
-
-		editProducto = new JTextField();
-		editProducto.setBorder(new LineBorder(new Color(0, 112, 192)));
-		editProducto.setHorizontalAlignment(SwingConstants.CENTER);
-		editProducto.setFont(new Font("Roboto", Font.PLAIN, 15));
-		editProducto.setFont(new Font("Roboto", Font.PLAIN, 15));
+		
+		editProducto = new JComboBox<String>();
+		editProducto.setBorder(new LineBorder(new Color(155, 38, 182)));
 		panel.add(editProducto);
-		editProducto.setColumns(10);
 
-		editCantidad = new JTextField();
-		editCantidad.setBorder(new LineBorder(new Color(0, 112, 192)));
-		editCantidad.setHorizontalAlignment(SwingConstants.CENTER);
-		editCantidad.setFont(new Font("Roboto", Font.PLAIN, 15));
-		editCantidad.setFont(new Font("Roboto", Font.PLAIN, 15));
-		panel.add(editCantidad);
-		editCantidad.setColumns(10);
+		cantidadProducto = new JSpinner();
+		cantidadProducto.setBorder(new LineBorder(new Color(155, 38, 182)));
+		cantidadProducto.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+		cantidadProducto.setFont(new Font("Roboto", Font.PLAIN, 15));
+		panel.add(cantidadProducto);
 
 		botonAgregar = new JButton("Agregar");
-		botonAgregar.setBackground(new Color(0, 112, 192));
+		botonAgregar.setBorderPainted(false);
+		botonAgregar.setBackground(new Color(155, 38, 182));
 		botonAgregar.setForeground(Color.WHITE);
 		botonAgregar.setIcon(new ImageIcon("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\iconos\\icons8-carrito-de-compras-32.png"));
 		botonAgregar.setFont(new Font("Roboto", Font.PLAIN, 15));
@@ -93,60 +100,60 @@ public class VentanaVenta extends JPanel implements ActionListener {
 		panel_2.setLayout(new GridLayout(6, 2, 0, 50));
 
 		JLabel lblEncargado = new JLabel("Encargado:");
-		lblEncargado.setFont(new Font("Roboto", Font.PLAIN, 15));
+		lblEncargado.setFont(new Font("Roboto", Font.PLAIN, 20));
 		panel_2.add(lblEncargado);
 
 		datoEmpleado = new JLabel("");
-		datoEmpleado.setFont(new Font("Roboto", Font.PLAIN, 15));
+		datoEmpleado.setFont(new Font("Roboto", Font.PLAIN, 20));
 		datoEmpleado.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_2.add(datoEmpleado);
 
 		JLabel lblFecha = new JLabel("Fecha:");
-		lblFecha.setFont(new Font("Roboto", Font.PLAIN, 15));
+		lblFecha.setFont(new Font("Roboto", Font.PLAIN, 20));
 		panel_2.add(lblFecha);
 
 		datoFecha = new JLabel("");
-		datoFecha.setFont(new Font("Roboto", Font.PLAIN, 15));
+		datoFecha.setFont(new Font("Roboto", Font.PLAIN, 20));
 		datoFecha.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_2.add(datoFecha);
 
 		JLabel lblTotal = new JLabel("Total:");
-		lblTotal.setFont(new Font("Roboto", Font.PLAIN, 15));
+		lblTotal.setFont(new Font("Roboto", Font.PLAIN, 20));
 		panel_2.add(lblTotal);
 
 		datoTotal = new JLabel("");
-		datoTotal.setFont(new Font("Roboto", Font.PLAIN, 15));
+		datoTotal.setFont(new Font("Roboto", Font.PLAIN, 20));
 		datoTotal.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_2.add(datoTotal);
 
 		JLabel lblTotalAPagar = new JLabel("Total a pagar:");
-		lblTotalAPagar.setFont(new Font("Roboto", Font.PLAIN, 15));
+		lblTotalAPagar.setFont(new Font("Roboto", Font.PLAIN, 20));
 		panel_2.add(lblTotalAPagar);
 
 		datoTotalAPagar = new JLabel("");
-		datoTotalAPagar.setFont(new Font("Roboto", Font.PLAIN, 15));
+		datoTotalAPagar.setFont(new Font("Roboto", Font.PLAIN, 20));
 		datoTotalAPagar.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_2.add(datoTotalAPagar);
 
 		JLabel lblRecibido = new JLabel("Recibido:");
-		lblRecibido.setFont(new Font("Roboto", Font.PLAIN, 15));
+		lblRecibido.setFont(new Font("Roboto", Font.PLAIN, 20));
 		panel_2.add(lblRecibido);
 
 		editRecibido = new JTextField();
-		editRecibido.setBorder(new LineBorder(new Color(0, 112, 192)));
+		editRecibido.setBorder(new LineBorder(new Color(155, 38, 182)));
 		editRecibido.addActionListener(this);
 		editRecibido.setToolTipText("");
-		editRecibido.setFont(new Font("Roboto", Font.PLAIN, 15));
+		editRecibido.setFont(new Font("Roboto", Font.PLAIN, 20));
 		editRecibido.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_2.add(editRecibido);
 		editRecibido.setColumns(10);
 
 		JLabel lbCambio = new JLabel("Cambio:");
-		lbCambio.setFont(new Font("Roboto", Font.PLAIN, 15));
+		lbCambio.setFont(new Font("Roboto", Font.PLAIN, 20));
 		panel_2.add(lbCambio);
 
 		datoCambio = new JLabel("");
-		datoCambio.setFont(new Font("Roboto", Font.PLAIN, 15));
+		datoCambio.setFont(new Font("Roboto", Font.PLAIN, 20));
 		datoCambio.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_2.add(datoCambio);
 
@@ -154,13 +161,15 @@ public class VentanaVenta extends JPanel implements ActionListener {
 		panel_1.add(panel_3, BorderLayout.SOUTH);
 
 		botonComprar = new JButton("Comprar");
-		botonComprar.setBackground(new Color(0, 112, 192));
+		botonComprar.setBorderPainted(false);
+		botonComprar.setBackground(new Color(155, 38, 182));
 		botonComprar.setForeground(Color.WHITE);
 		botonComprar.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel_3.add(botonComprar);
 
 		botonCancelar = new JButton("Cancelar");
-		botonCancelar.setBackground(new Color(0, 112, 192));
+		botonCancelar.setBorderPainted(false);
+		botonCancelar.setBackground(new Color(155, 38, 182));
 		botonCancelar.setForeground(Color.WHITE);
 		botonCancelar.addActionListener(this);
 		botonCancelar.setFont(new Font("Roboto", Font.PLAIN, 15));
@@ -172,6 +181,15 @@ public class VentanaVenta extends JPanel implements ActionListener {
 		tablaCompras = new JTable();
 		tablaCompras.setFont(new Font("Roboto", Font.PLAIN, 18));
 		scrollPane.setViewportView(tablaCompras);
+
+		panel_4 = new JPanel();
+		add(panel_4, BorderLayout.SOUTH);
+
+		btnEliminarCompra = new JButton("Eliminar Compra");
+		btnEliminarCompra.setForeground(Color.WHITE);
+		btnEliminarCompra.setFont(new Font("Roboto", Font.PLAIN, 15));
+		btnEliminarCompra.setBackground(new Color(155, 38, 182));
+		panel_4.add(btnEliminarCompra);
 	}
 
 	@Override
@@ -215,21 +233,32 @@ public class VentanaVenta extends JPanel implements ActionListener {
 			modelo.addRow(tupla);
 		}
 		tablaCompras.setModel(modelo);
+		
 		if(aux) {
 			modelo.setRowCount(0);
 			total = 0;
 		}
+
+		int filas =  modelo.getRowCount();
+		btnEliminarCompra.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(filas != 0) {
+					eliminarPedido(tablaCompras, modelo, compras);
+				}
+			}
+		});
 	}
 
 	public Compra getDatosCompra(String nombre, TablaProducto producto) {
 		Compra compra = new Compra();
 		compra.setCodigoBarras(producto.getCodigoBarras(nombre));
 		compra.setNombreProducto(nombre);
-		if(editCantidad.getText().isEmpty())
-			editCantidad.setText("1");
-		compra.setCantidadProducto(Integer.parseInt(editCantidad.getText()));
+		int cantidad = (int) cantidadProducto.getValue();
+		compra.setCantidadProducto(cantidad);
 		compra.setPrecioProducto(producto.getPrecio(nombre));
-		compra.setTotalProducto(Integer.parseInt(editCantidad.getText()) * producto.getPrecio(nombre));
+		compra.setTotalProducto(cantidad * producto.getPrecio(nombre));
 		total += compra.getTotalProducto();
 		datosPrecio(total);
 		return compra;
@@ -238,21 +267,21 @@ public class VentanaVenta extends JPanel implements ActionListener {
 	public Ticket getTicket(int clave) {
 		Ticket ticket = new Ticket();
 		String fechaDeVenta = eliminaContenido(datoFecha.getText(), " ");
-		
+
 		String formatoFecha = "yyyyMMdd";
 		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		Date date = new Date();
-		
+
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-        Date parsed = null;
+		Date parsed = null;
 		try {
 			parsed = format.parse(dateFormat.format(date));
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-        java.sql.Date sql = new java.sql.Date(parsed.getTime());
-		
+		java.sql.Date sql = new java.sql.Date(parsed.getTime());
+
 		ticket.setFecha(sql);
 		ticket.setTotal(Float.parseFloat(datoTotalAPagar.getText()));
 		ticket.setClaveEmpleado(clave);
@@ -277,7 +306,20 @@ public class VentanaVenta extends JPanel implements ActionListener {
 	}
 
 	public String getNombre() {
-		return editProducto.getText();
+		return editProducto.getSelectedItem().toString();
+	}
+	
+	public JComboBox<String> getCampoProducto() {
+		return editProducto;
+	}
+	
+	public JSpinner getCantidadProducto() {
+		return cantidadProducto;
+	}
+	
+	public int getCantidad() {
+		int cantidad = (int) cantidadProducto.getValue();
+		return cantidad;
 	}
 
 	public JButton getBotonAgregar() {
@@ -293,7 +335,8 @@ public class VentanaVenta extends JPanel implements ActionListener {
 	}
 
 	public boolean datosVacios() {
-		return datoTotalAPagar.getText().isEmpty() || datoCambio.getText().isEmpty() || editRecibido.getText().isEmpty();
+		return datoTotalAPagar.getText().isEmpty() || datoCambio.getText().isEmpty() || editRecibido.getText().isEmpty()
+				|| compras.isEmpty() || datoTotalAPagar.getText().equals("0.0");
 	}
 
 	private String eliminaContenido(String text, String sep){     
@@ -306,5 +349,78 @@ public class VentanaVenta extends JPanel implements ActionListener {
 
 	public List<Compra> compras() {
 		return compras;
+	}
+
+	public void eliminarPedido(JTable tblDetalle, DefaultTableModel modelo, List<Compra> compras) {
+		modelo = (DefaultTableModel) tblDetalle.getModel();
+		int fila = tblDetalle.getSelectedRow();
+		if (fila >= 0) {
+			
+			String nombreProducto = (String) modelo.getValueAt(tblDetalle.getSelectedRow(), 1);
+			String precio = (String) modelo.getValueAt(tblDetalle.getSelectedRow(), 4);
+			float totalProducto = Float.parseFloat(precio);
+			totalProducto = Float.parseFloat(datoTotal.getText()) - totalProducto;
+			datoTotal.setText(String.valueOf(totalProducto));
+			datoTotalAPagar.setText(String.valueOf(totalProducto));
+			total = totalProducto;
+			
+			int []filasselec = tblDetalle.getSelectedRows();
+			for (int i=0; i<filasselec. length;i++) {
+				modelo.removeRow(filasselec[i]);
+			}
+			
+			for (Compra compra2 : compras) {
+				if(compra2.getNombreProducto().equals(nombreProducto)) {
+					compras.remove(compra2);
+					break;
+				}
+			}
+		}
+	}
+	
+	public void buscarProducto(List<Producto> productos, JComboBox<String> datos) {
+		for (Producto producto : productos) {
+			datos.addItem(producto.getNombre());
+		}
+	}
+	
+	public void limpiar() {
+		datoTotal.setText(null);
+		datoTotalAPagar.setText(null);
+		datoCambio.setText(null);
+		compras.clear();
+		editProducto.requestFocus();
+		tablaCompras.clearSelection();
+		editRecibido.setText(null);
+		total = 0;
+	}
+	
+	public static void generarTicket(List<RenglonTicket> list,double total) {
+		Document documento = new Document();
+
+		FileOutputStream ficheroPdf;
+		try {
+			ficheroPdf = new FileOutputStream("ticket.pdf");
+			PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(20);
+			documento.open();
+			for (RenglonTicket r : list) {
+				documento.add(new Paragraph(r.getCodigoBarra()+"          "+r.getCantidad()));
+
+			}
+			documento.add(new Paragraph("\nTotal:         "+total));
+			documento.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void generarTicket() throws FileNotFoundException {
+		PdfWriter writer = new PdfWriter("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\Ticket.pdf");
+		PdfDocument document = new PdfDocument(writer);
+		// Se crea el documento
+		Document documento = new Document(document);
+		documento.add(new Paragraph("Hola mundo"));
+		documento.close();
 	}
 }

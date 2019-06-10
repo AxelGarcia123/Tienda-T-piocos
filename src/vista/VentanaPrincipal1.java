@@ -1,19 +1,25 @@
 package vista;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+import java.math.BigInteger;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import modelo.AutoCompletion;
 import modelo.BaseDatos;
 import modelo.Compra;
 import modelo.RenglonTicket;
@@ -22,6 +28,7 @@ import modelo.TablaProducto;
 import modelo.TablaRenglonTicket;
 import modelo.TablaResurtir;
 import modelo.TablaTicket;
+import java.awt.Toolkit;
 
 public class VentanaPrincipal1 extends JFrame implements ActionListener{
 
@@ -43,7 +50,13 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 	private VentanaInventario ventanaInventario;
 	private VentanaVenta venta;
 	private VentanaReportes reportes;
+	private VentanaRegistrarProducto registrarProducto;
+	private VentanaProductosDisponibles productoD;
+	private ResurtirProducto registroP;
+	private VentanaGrafica grafica;
 	private boolean aux = false;
+	private int limite = 0;
+	private String puesto = "";
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -59,6 +72,7 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 	}
 
 	public VentanaPrincipal1() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\iconos\\iconos-tienda-online_23-2147516201.jpg"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 557, 380);
 		contentPane = new JPanel();
@@ -101,20 +115,28 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 	public void inicioSesion() {
 		if(tablaRegistro.existe(inicio.getNombreUsuario().getText())) {
 			if(tablaRegistro.validacion(inicio.getPassword())) {
-				contentPane.removeAll();
-				setExtendedState(MAXIMIZED_BOTH);
-				//ventanaInicial = new VentanaInicial();
-				titulo = new VentanaTitulo();
-				contentPane.add(titulo, BorderLayout.NORTH);
-				//contentPane.add(ventanaInicial, BorderLayout.CENTER);
+				puesto = tablaRegistro.tipoEmpleado(inicio.getPassword(), inicio.getNombreUsuario().getText());
+				if(puesto.equals("Administrador")) {
+					contentPane.removeAll();
+					setExtendedState(MAXIMIZED_BOTH);
+					titulo = new VentanaTitulo();
+					contentPane.add(titulo, BorderLayout.NORTH);
 
-				titulo.getBotonMenu().addActionListener(new ActionListener() {
+					titulo.getBotonMenu().addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						mostrarMenuLateral();
-					}
-				});
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							mostrarMenuLateral();
+						}
+					});
+				}
+				else if(tablaRegistro.tipoEmpleado(inicio.getPassword(), inicio.getNombreUsuario().getText()).equals("Empleado")) {
+					contentPane.removeAll();
+					setExtendedState(MAXIMIZED_BOTH);
+					ventas();
+					ventanaInicial = new VentanaInicial();
+					contentPane.add(ventanaInicial, BorderLayout.NORTH);
+				}
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "La contraseña es incorrecta.", null, JOptionPane.ERROR_MESSAGE);
@@ -172,11 +194,20 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 	public void mostrarMenuLateral() {
 		if(menuLateral == null) {
 			menuLateral = new MenuLateral();
+			menuLateral.getDatoEmpleado().setText(tablaEmpleado.getNombre(inicio.getNombreUsuario().getText()));
 			menuLateral.getProductos().addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					registrarProducto();
+					registroProductos();
+				}
+			});
+
+			menuLateral.getBotonRegistrart().addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					registrarProductos();
 				}
 			});
 
@@ -195,20 +226,36 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 					ventas();
 				}
 			});
-			
+
 			menuLateral.getVentasDelDia().addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					ventanaReportes();
 				}
 			});
-			
+
 			menuLateral.getBotonInicio().addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					inicio();
+				}
+			});
+
+			menuLateral.getBotonExistencia().addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					productosDisponibles();
+				}
+			});
+			
+			menuLateral.getBotonGraficas().addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					graficas();
 				}
 			});
 			contentPane.add(menuLateral, BorderLayout.WEST);
@@ -226,55 +273,120 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 		repaint();
 	}
 
-	public void registrarProducto() {
+	public void registroProductos() {
+		contentPane.removeAll();
+		reportes = null;
+		venta = null;
+		registroProducto = null;
+		ventanaInventario = null;
+		ventanaProducto = null;
+		registrarProducto = null;
+		productoD = null;
+		registroP = null;
+		grafica = null;
+		borrarMenu();
+		contentPane.add(titulo, BorderLayout.NORTH);
+		repaint();
+		
 		if(ventanaProducto == null) {
-			//titulo.getTitulo().setText("Registro de productos");
 			ventanaProducto = new VistaRegistrarProducto();
-			borrarMenu();
-
 			ventanaProducto.mostrarProductos(tablaProducto.getProductos());
-			ventanaProducto.getButton().addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					registroProducto = new RegistroProducto();
-					registroProducto.getBotonRegistrar().addActionListener(new ActionListener() {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							tablaProducto.guardar(registroProducto.registrarProducto());
-							ventanaProducto.mostrarProductos(tablaProducto.getProductos());
-							registroProducto.limpiarVentana();
-						}
-					});
-
-					registroProducto.getBotonCancelar().addActionListener(new ActionListener() {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							registroProducto.limpiarVentana();
-						}
-					});
-
-					registroProducto.setVisible(true);
-				}
-			});
 			contentPane.add(ventanaProducto);
 			setVisible(true);
 		}
 	}
 
+	public void registrarProductos() {
+		contentPane.removeAll();
+		reportes = null;
+		venta = null;
+		registroProducto = null;
+		ventanaInventario = null;
+		ventanaProducto = null;
+		registrarProducto = null;
+		productoD = null;
+		registroP = null;
+		grafica = null;
+		borrarMenu();
+		contentPane.add(titulo, BorderLayout.NORTH);
+		repaint();
+
+		if(registrarProducto == null) {
+			registrarProducto = new VentanaRegistrarProducto();
+			registrarProducto.codigoBarras().addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(!tablaProducto.existeCodigo(registrarProducto.codigoBarras().getText())) {
+
+					}
+					else 
+						JOptionPane.showMessageDialog(null, "Ya existe un producto con ese C\u00f3digo de Barras.", null, JOptionPane.ERROR_MESSAGE);
+				}
+			});
+			
+			registrarProducto.llenarTipo(tablaProducto.getListaProductos(), registrarProducto.getTipo());
+			AutoCompletion.enable(registrarProducto.getTipo());
+			
+			registrarProducto.llenarMedida(tablaProducto.getListaProductos(), registrarProducto.getUnidadMedida());
+			AutoCompletion.enable(registrarProducto.getUnidadMedida());
+			
+			registrarProducto.llenarPresentacion(tablaProducto.getListaProductos(), registrarProducto.getPresentacion());
+			AutoCompletion.enable(registrarProducto.getPresentacion());
+
+			registrarProducto.getBotonRegistrar().addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(!tablaProducto.existeCodigo(registrarProducto.codigoBarras().getText())) {
+						if(!registrarProducto.hayCamposVacios()) {
+							tablaProducto.guardar(registrarProducto.registrarProducto());
+							JOptionPane.showMessageDialog(null, "El producto se ha registrado");
+							registrarProducto.limpiarCampos();
+						}
+						else
+							JOptionPane.showMessageDialog(null, "Hay campos vacios que no pueden quedar así.", null, JOptionPane.ERROR_MESSAGE);
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Ya existe un producto con ese C\u00f3digo de Barras.", null, JOptionPane.ERROR_MESSAGE);
+						registrarProducto.enfocar();
+					}
+				}
+			});
+
+			contentPane.add(registrarProducto);
+			setVisible(true);
+		}
+	}
+
 	public void inventario() {
+		contentPane.removeAll();
+		reportes = null;
+		venta = null;
+		registroProducto = null;
+		ventanaInventario = null;
+		ventanaProducto = null;
+		registrarProducto = null;
+		productoD = null;
+		registroP = null;
+		grafica = null;
+		borrarMenu();
+		contentPane.add(titulo, BorderLayout.NORTH);
+		repaint();
+
 		if(ventanaInventario == null) {
 			ventanaInventario = new VentanaInventario();
-			borrarMenu();
 			ventanaInventario.mostrarResurtidos(tablaResurtir.getResurtidos(), tablaResurtir);
+			
+			ventanaInventario.buscarProducto(tablaProducto.getListaProductos(), ventanaInventario.getCampoProducto());
+			AutoCompletion.enable(ventanaInventario.getCampoProducto());
+			
 			ventanaInventario.getCampoProducto().addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(!ventanaInventario.getCampoProducto().getText().isEmpty()) {
-						if(tablaResurtir.existe(ventanaInventario.getCampoProducto().getText())) {
+					if(!ventanaInventario.getCampoProducto().getSelectedItem().toString().isEmpty()) {
+						if(tablaResurtir.existe(ventanaInventario.getCampoProducto().getSelectedItem().toString())) {
 							ventanaInventario.enfocarCantidad();
 						}
 						else
@@ -290,11 +402,36 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(!ventanaInventario.camposVacios()) {
-						if(tablaResurtir.existe(ventanaInventario.getCampoProducto().getText())) {
-							JOptionPane.showMessageDialog(null, "Producto registrado");
-							tablaResurtir.guardar(ventanaInventario.registrarResurtir(tablaResurtir.getCodigoBarras(ventanaInventario.getCampoProducto().getText())));
-							ventanaInventario.mostrarResurtidos(tablaResurtir.getResurtidos(), tablaResurtir);
-							ventanaInventario.limpiarCampos();
+						if(tablaResurtir.existe(ventanaInventario.getCampoProducto().getSelectedItem().toString())) {
+							int cantidad = ventanaInventario.getCantidadResurtir();
+							if(tablaProducto.getMax(tablaResurtir.getCodigoBarras(ventanaInventario.getCampoProducto().getSelectedItem().toString())) > cantidad) {
+								tablaResurtir.guardar(ventanaInventario.registrarResurtir(tablaResurtir.getCodigoBarras(ventanaInventario.getCampoProducto().getSelectedItem().toString())));
+								ventanaInventario.mostrarResurtidos(tablaResurtir.getResurtidos(), tablaResurtir);
+
+								int resurtido = ventanaInventario.getCantidad();
+								int nuevoDato = cantidadNueva(ventanaInventario.getCampoProducto().getSelectedItem().toString(), resurtido);
+								tablaProducto.actualizar(nuevoDato, tablaResurtir.getCodigoBarras(ventanaInventario.getCampoProducto().getSelectedItem().toString()));
+
+								ventanaInventario.limpiarCampos();
+								JOptionPane.showMessageDialog(null, "Producto registrado");
+							}
+							else {
+								int input = JOptionPane.showConfirmDialog(null, "El producto estar\u00e1 en sobreexistencia.\n¿Desea continuar?", null, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+								if(input == JOptionPane.YES_OPTION) {
+									tablaResurtir.guardar(ventanaInventario.registrarResurtir(tablaResurtir.getCodigoBarras(ventanaInventario.getCampoProducto().getSelectedItem().toString())));
+									ventanaInventario.mostrarResurtidos(tablaResurtir.getResurtidos(), tablaResurtir);
+
+									int resurtido = ventanaInventario.getCantidad();
+									int nuevoDato = cantidadNueva(ventanaInventario.getCampoProducto().getSelectedItem().toString(), resurtido);
+									tablaProducto.actualizar(nuevoDato, tablaResurtir.getCodigoBarras(ventanaInventario.getCampoProducto().getSelectedItem().toString()));
+
+									ventanaInventario.limpiarCampos();
+									JOptionPane.showMessageDialog(null, "Producto registrado");
+								}
+								else {
+									ventanaInventario.enfocarCantidad();
+								}
+							}
 						}
 						else {
 							JOptionPane.showMessageDialog(null, "Ese producto no ha sido registrado.", null, JOptionPane.ERROR_MESSAGE);
@@ -340,18 +477,40 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 	}
 
 	public void ventas() {
+		if(puesto.equals("Empleado")) {
+			
+		}
 		
+		else if(puesto.equals("Administrador")) {
+			contentPane.removeAll();
+			reportes = null;
+			venta = null;
+			registroProducto = null;
+			ventanaInventario = null;
+			ventanaProducto = null;
+			registrarProducto = null;
+			productoD = null;
+			registroP = null;
+			grafica = null;
+			borrarMenu();
+			contentPane.add(titulo, BorderLayout.NORTH);
+			repaint();
+		}
+		//VENTAS LO DE COMBO BOX
 		if(venta == null) {
 			venta = new VentanaVenta();
-			borrarMenu();
 			venta.agregarDatos(tablaEmpleado.getNombre(inicio.getNombreUsuario().getText()));
+			
+			venta.buscarProducto(tablaProducto.getListaProductos(), venta.getCampoProducto());
+			AutoCompletion.enable(venta.getCampoProducto());
+			
 			venta.getBotonAgregar().addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(!venta.getNombre().isEmpty()) {
 						if(tablaProducto.existe(venta.getNombre())) {
-							venta.mostrarCompras(venta.getNombre(), tablaProducto, aux);
+								venta.mostrarCompras(venta.getNombre(), tablaProducto, aux);
 						}
 						else
 							JOptionPane.showMessageDialog(null, "Ese producto no ha sido registrado.", null, JOptionPane.ERROR_MESSAGE);
@@ -370,7 +529,14 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 						tablaTicket.guardar(venta.getTicket(tablaRegistro.getCodigoEmpleado(inicio.getNombreUsuario().getText())));
 						datosTicket(venta.compras(), tablaTicket.getCodigoTicket(venta.totalPrecio()),tablaRegistro.getCodigoEmpleado(inicio.getNombreUsuario().getText()));
 						venta.mostrarCompras(venta.getNombre(), tablaProducto, aux);
+						venta.limpiar();
 						JOptionPane.showMessageDialog(null, "Compra hecha");
+						try {
+							venta.generarTicket();
+						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						aux = false;
 					}
 					else
@@ -392,16 +558,163 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 			setVisible(true);
 		}
 	}
-	
-	public void ventanaReportes() {
-		if(reportes == null) {
-			reportes = new VentanaReportes();
-			reportes.mostrarReportes(renglonTicket.getDatos());
-			contentPane.add(reportes);
+
+	public void productosDisponibles() {
+		contentPane.removeAll();
+		reportes = null;
+		venta = null;
+		registroProducto = null;
+		ventanaInventario = null;
+		ventanaProducto = null;
+		registrarProducto = null;
+		productoD = null;
+		registroP = null;
+		grafica = null;
+		borrarMenu();
+		contentPane.add(titulo, BorderLayout.NORTH);
+		repaint();
+
+		if(productoD == null) {
+			productoD = new VentanaProductosDisponibles();
+			
+			productoD.getBusqueda().addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(String.valueOf(productoD.getBusqueda().getSelectedItem()).equals("Nombre del Producto")) {
+						productoD.getDatoNombre().setVisible(true);
+						productoD.getCampo().setVisible(true);
+						productoD.buscarPorNombre(tablaProducto.getListaProductos(), productoD.getCampo());
+						AutoCompletion.enable(productoD.getCampo());
+					}
+					
+					else if(String.valueOf(productoD.getBusqueda().getSelectedItem()).equals("Código de Barras")) {
+						productoD.getDatoNombre().setVisible(true);
+						productoD.getCampo().setVisible(true);
+						productoD.buscarPorCodigo(tablaProducto.getListaProductos(), productoD.getCampo());
+						AutoCompletion.enable(productoD.getCampo());
+					}
+					
+					else if(String.valueOf(productoD.getBusqueda().getSelectedItem()).equals("-----------------------")) {
+						productoD.getDatoNombre().setVisible(false);
+						productoD.getCampo().setVisible(false);
+					}
+				}
+			});
+			
+			productoD.getBoton().addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String nombre = (String) productoD.getCampo().getSelectedItem();
+					String data = productoD.getCombo();
+					if(!data.equals("-----------------------")) {
+						if(!nombre.isEmpty()) {
+							if(data.equalsIgnoreCase("Nombre del Producto")) {
+								if(tablaProducto.existe(nombre)) {
+									if(tablaProducto.getProductByName(nombre).getDisponible() <= tablaProducto.getProductByName(nombre).getCantidadMinima()) {
+										productoD.getDatoDisponible().setForeground(new Color(247, 70, 53));
+										productoD.mostrarProducto(tablaProducto.getProductByName(nombre));
+										JOptionPane.showMessageDialog(null, "Resurtir pronto "+ nombre);
+									}
+									else {
+										productoD.getDatoDisponible().setForeground(new Color(0, 0, 0));
+										productoD.mostrarProducto(tablaProducto.getProductByName(nombre));
+									}
+								}
+								else
+									JOptionPane.showMessageDialog(null, "Ese producto no existe.", null, JOptionPane.ERROR_MESSAGE);
+							}
+							else {
+								if(tablaProducto.existeCodigo(nombre)) {
+									productoD.mostrarProducto(tablaProducto.getProductByCodebar(new BigInteger(nombre)));
+								}
+								else
+									JOptionPane.showMessageDialog(null, "Ese producto no existe.", null, JOptionPane.ERROR_MESSAGE);
+							}
+						}
+						else
+							JOptionPane.showMessageDialog(null, "El campo no puede quedar vacio.", null, JOptionPane.ERROR_MESSAGE);
+					}
+					else
+						JOptionPane.showMessageDialog(null, "Seleccione un m\u00e9todo de b\u00fasqueda.", null, JOptionPane.ERROR_MESSAGE);
+				}
+			});
+
+			productoD.getBotonResurtir().addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					registroP = new ResurtirProducto(productoD.getNombre().getText());
+					registroP.getBotonResurtir().addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							int cantidad = tablaProducto.getMax(tablaProducto.getCodigoBarras(productoD.getNombre().getText()));
+							if(registroP.getCantidad() < cantidad) {
+								tablaResurtir.guardar(registroP.registrarResurtir(tablaResurtir.getCodigoBarras(registroP.getNombreProducto())));
+								int resurtir = registroP.getCantidad();
+								int nuevoDato = cantidadNueva(registroP.getNombreProducto(), resurtir);
+								tablaProducto.actualizar(nuevoDato, tablaResurtir.getCodigoBarras(registroP.getNombreProducto()));
+								registroP.limpiarVentana();
+							}
+							else {
+								int input = JOptionPane.showConfirmDialog(null, "El producto estar\u00e1 en sobreexistencia.\n¿Desea continuar?", null, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+								if(input == JOptionPane.YES_OPTION) {
+									tablaResurtir.guardar(registroP.registrarResurtir(tablaResurtir.getCodigoBarras(registroP.getNombreProducto())));
+									int resurtir = registroP.getCantidad();
+									int nuevoDato = cantidadNueva(registroP.getNombreProducto(), resurtir);
+									tablaProducto.actualizar(nuevoDato, tablaResurtir.getCodigoBarras(registroP.getNombreProducto()));
+									registroP.limpiarVentana();
+								}
+								else {
+									registroP.getCampoCantidad().requestFocus();
+								}
+							}
+						}
+					});
+
+					registroP.getBotonCancelar().addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							registroP.limpiarVentana();
+						}
+					});
+
+					registroP.setVisible(true);
+				}
+			});
+
+			contentPane.add(productoD);
 			setVisible(true);
 		}
 	}
-	
+
+	public void ventanaReportes() {
+		
+		contentPane.removeAll();
+		reportes = null;
+		venta = null;
+		registroProducto = null;
+		ventanaInventario = null;
+		ventanaProducto = null;
+		registrarProducto = null;
+		productoD = null;
+		registroP = null;
+		grafica = null;
+		borrarMenu();
+		contentPane.add(titulo, BorderLayout.NORTH);
+		repaint();
+		
+		if(reportes == null) {
+			reportes = new VentanaReportes();
+			reportes.mostrarReportes(renglonTicket.getDatos());
+			contentPane.add(reportes, BorderLayout.CENTER);
+			setVisible(true);
+		}
+	}
+
 	public void inicio() {
 		contentPane.removeAll();
 		reportes = null;
@@ -409,9 +722,39 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 		registroProducto = null;
 		ventanaInventario = null;
 		ventanaProducto = null;
+		registrarProducto = null;
+		productoD = null;
+		registroP = null;
+		grafica = null;
 		borrarMenu();
 		contentPane.add(titulo, BorderLayout.NORTH);
 		repaint();
+	}
+	
+	public void graficas() {
+		if(grafica == null) {
+			grafica = new VentanaGrafica();
+			
+			grafica.mostrarTipos(tablaProducto.getTipoProducto());
+			grafica.getBotonGraficar().addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String tipo = grafica.getTipo();
+					grafica.mostrarGrafica(tablaProducto.getProductoVendido(tipo), tipo);
+				}
+			});
+			
+			grafica.getGraficarTodo().addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					grafica.mostrarGraficaTodo(tablaProducto.getProductosTodos());
+				}
+			});
+			contentPane.add(grafica);
+			setVisible(true);
+		}
 	}
 
 	public void datosTicket(List<Compra> compras, int ticket, int empleado) {
@@ -421,10 +764,16 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 			datos.setCodigoBarra(compra.getCodigoBarras());
 			datos.setFolioTicket(ticket);
 			datos.setClaveEmpleado(empleado);
-			int cantidadAnterior = tablaResurtir.getCantidad(compra.getCodigoBarras());
+			int cantidadAnterior = tablaProducto.getCantidad(compra.getCodigoBarras());
 			int nuevoDato = cantidadAnterior - compra.getCantidadProducto();
-			tablaResurtir.actualizar(nuevoDato, cantidadAnterior, compra.getCodigoBarras());
+			tablaProducto.actualizar(nuevoDato, compra.getCodigoBarras());
 			renglonTicket.guardar(datos);
 		}
+	}
+
+	public int cantidadNueva(String nombre, int cantidad) {
+		int nuevoDato = tablaProducto.getCantidad(tablaResurtir.getCodigoBarras(nombre));
+		nuevoDato += cantidad;
+		return nuevoDato;
 	}
 }

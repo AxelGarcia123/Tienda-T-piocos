@@ -27,9 +27,9 @@ import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
+import javax.swing.JComboBox;
 
 public class VentanaInventario extends JPanel implements ActionListener{
-	private JTextField editProducto;
 	private JTextField editCantidad;
 	private JTextField editPrecioUnidad;
 	private JTable tablaResurtir;
@@ -38,6 +38,7 @@ public class VentanaInventario extends JPanel implements ActionListener{
 	private JButton botonCancelar;
 	private RSDateChooser editFechaResurtir;
 	private RSDateChooser editFechaCaducidad;
+	private JComboBox<String> editProducto;
 
 	public VentanaInventario() {
 		setLayout(new BorderLayout(0, 0));
@@ -46,19 +47,22 @@ public class VentanaInventario extends JPanel implements ActionListener{
 		add(panel, BorderLayout.SOUTH);
 
 		botonResurtir = new JButton("Resurtir");
-		botonResurtir.setBackground(new Color(0, 112, 192));
+		botonResurtir.setBorderPainted(false);
+		botonResurtir.setBackground(new Color(155, 38, 182));
 		botonResurtir.setForeground(Color.WHITE);
 		botonResurtir.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel.add(botonResurtir);
 
 		botonRegistrar = new JButton("Registrar Producto");
-		botonRegistrar.setBackground(new Color(0, 112, 192));
+		botonRegistrar.setBorderPainted(false);
+		botonRegistrar.setBackground(new Color(155, 38, 182));
 		botonRegistrar.setForeground(Color.WHITE);
 		botonRegistrar.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel.add(botonRegistrar);
 
 		botonCancelar = new JButton("Cancelar");
-		botonCancelar.setBackground(new Color(0, 112, 192));
+		botonCancelar.setBorderPainted(false);
+		botonCancelar.setBackground(new Color(155, 38, 182));
 		botonCancelar.setForeground(Color.WHITE);
 		botonCancelar.setFont(new Font("Roboto", Font.PLAIN, 15));
 		panel.add(botonCancelar);
@@ -71,14 +75,12 @@ public class VentanaInventario extends JPanel implements ActionListener{
 		lblProducto.setFont(new Font("Roboto", Font.PLAIN, 15));
 		lblProducto.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(lblProducto);
-
-		editProducto = new JTextField();
-		editProducto.setBorder(new LineBorder(new Color(0, 112, 192)));
-		editProducto.addActionListener(this);
-		editProducto.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		editProducto = new JComboBox<String>();
+		editProducto.setToolTipText("");
 		editProducto.setFont(new Font("Roboto", Font.PLAIN, 15));
+		editProducto.setBorder(new LineBorder(new Color(155, 38, 182)));
 		panel_1.add(editProducto);
-		editProducto.setColumns(10);
 
 		JLabel lblCantidadResurtida = new JLabel("Cantidad Resurtida:");
 		lblCantidadResurtida.setFont(new Font("Roboto", Font.PLAIN, 15));
@@ -86,7 +88,7 @@ public class VentanaInventario extends JPanel implements ActionListener{
 		panel_1.add(lblCantidadResurtida);
 
 		editCantidad = new JTextField();
-		editCantidad.setBorder(new LineBorder(new Color(0, 112, 192)));
+		editCantidad.setBorder(new LineBorder(new Color(155, 38, 182)));
 		editCantidad.addActionListener(this);
 		editCantidad.setHorizontalAlignment(SwingConstants.CENTER);
 		editCantidad.setFont(new Font("Roboto", Font.PLAIN, 15));
@@ -99,6 +101,9 @@ public class VentanaInventario extends JPanel implements ActionListener{
 		panel_1.add(lblFechaDeResurtido);
 
 		editFechaResurtir = new RSDateChooser();
+		editFechaResurtir.setColorButtonHover(new Color(155, 38, 182));
+		editFechaResurtir.setColorForeground(new Color(155, 38, 182));
+		editFechaResurtir.setColorBackground(new Color(155, 38, 182));
 		panel_1.add(editFechaResurtir);
 
 		JLabel lblPrcioPorUnidad = new JLabel("Pr\u00E9cio por unidad:");
@@ -107,7 +112,7 @@ public class VentanaInventario extends JPanel implements ActionListener{
 		panel_1.add(lblPrcioPorUnidad);
 
 		editPrecioUnidad = new JTextField();
-		editPrecioUnidad.setBorder(new LineBorder(new Color(0, 112, 192)));
+		editPrecioUnidad.setBorder(new LineBorder(new Color(155, 38, 182)));
 		editPrecioUnidad.addActionListener(this);
 		editPrecioUnidad.setHorizontalAlignment(SwingConstants.CENTER);
 		editPrecioUnidad.setFont(new Font("Roboto", Font.PLAIN, 15));
@@ -120,6 +125,9 @@ public class VentanaInventario extends JPanel implements ActionListener{
 		panel_1.add(lblFechaDeCaducidad);
 
 		editFechaCaducidad = new RSDateChooser();
+		editFechaCaducidad.setColorBackground(new Color(155, 38, 182));
+		editFechaCaducidad.setColorForeground(new Color(155, 38, 182));
+		editFechaCaducidad.setColorButtonHover(new Color(155, 38, 182));
 		panel_1.add(editFechaCaducidad);
 
 		tablaResurtir = new JTable();
@@ -129,7 +137,7 @@ public class VentanaInventario extends JPanel implements ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {		
+	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == editCantidad) {
 			if(editCantidad.getText().isEmpty()) 
 				JOptionPane.showMessageDialog(null, "El campo no puede quedar vacio.", null, JOptionPane.ERROR_MESSAGE);
@@ -142,7 +150,6 @@ public class VentanaInventario extends JPanel implements ActionListener{
 		}
 
 		if(e.getSource() == editPrecioUnidad) {
-			JOptionPane.showMessageDialog(null, editFechaResurtir.getDatoFecha());
 			if(editPrecioUnidad.getText().isEmpty())
 				JOptionPane.showMessageDialog(null, "El campo no puede quedar vacio.", null, JOptionPane.ERROR_MESSAGE);
 			else
@@ -206,16 +213,23 @@ public class VentanaInventario extends JPanel implements ActionListener{
 	public boolean camposVacios() {
 		String fechaResurtir = String.valueOf(editFechaResurtir.getDatoFecha());
 		String fechaCaducidad = String.valueOf(editFechaCaducidad.getDatoFecha());
-		return editProducto.getText().isEmpty() || editCantidad.getText().isEmpty() || editPrecioUnidad.getText().isEmpty()
+		String datoProducto = editProducto.getSelectedItem().toString();
+		return datoProducto.isEmpty() || editCantidad.getText().isEmpty() || editPrecioUnidad.getText().isEmpty()
 				|| fechaResurtir.isEmpty() || fechaCaducidad.isEmpty();
 	}
 	
 	public void limpiarCampos() {
-		editProducto.setText(null);
+		editProducto.setSelectedItem(null);
 		editCantidad.setText(null);
 		editPrecioUnidad.setText(null);
 		editFechaResurtir.setDatoFecha(null);
 		editFechaCaducidad.setDatoFecha(null);
+	}
+	
+	public void buscarProducto(List<Producto> productos, JComboBox<String> datos) {
+		for (Producto producto : productos) {
+			datos.addItem(producto.getNombre());
+		}
 	}
 
 	public JButton getBotonResurtir() {
@@ -230,7 +244,7 @@ public class VentanaInventario extends JPanel implements ActionListener{
 		return botonCancelar;
 	}
 
-	public JTextField getCampoProducto() {
+	public JComboBox<String> getCampoProducto() {
 		return editProducto;
 	}
 
@@ -238,7 +252,19 @@ public class VentanaInventario extends JPanel implements ActionListener{
 		editCantidad.requestFocus();
 	}
 	
+	public int getCantidadResurtir() {
+		return Integer.parseInt(editCantidad.getText());
+	}
+	
 	public void enfocarCursor() {
 		editProducto.requestFocus();
+	}
+	
+	public JTextField getCantidadProducto() {
+		return editCantidad;
+	}
+	
+	public int getCantidad() {
+		return Integer.parseInt(editCantidad.getText());
 	}
 }

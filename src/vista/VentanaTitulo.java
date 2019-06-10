@@ -19,12 +19,14 @@ public class VentanaTitulo extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(0, 112, 192));
+		panel.setBackground(new Color(155, 38, 182));
 		add(panel, BorderLayout.NORTH);
 		panel.setLayout(new GridLayout(0, 5, 200, 0));
 		
-		botonMenu = new JButton("");
-		botonMenu.setHorizontalTextPosition(SwingConstants.CENTER);
+		botonMenu = new JButton("Men\u00FA");
+		botonMenu.setForeground(Color.WHITE);
+		botonMenu.setFont(new Font("Roboto", Font.PLAIN, 18));
+		botonMenu.setHorizontalTextPosition(SwingConstants.RIGHT);
 		botonMenu.setContentAreaFilled(false);
 		botonMenu.setBorderPainted(false);
 		botonMenu.setSize(new Dimension(1, 1));

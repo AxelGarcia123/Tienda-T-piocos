@@ -51,7 +51,7 @@ public class TablaRegistro {
 	}
 	
 	public boolean validacion(String password) {
-		String sql = "select * from registro where contraseña='"+ password + "'";
+		String sql = "select * from registro where contraseña= (MD5('"+ password + "'))";
 		try {
 			ResultSet rs = statement.executeQuery(sql);
 			if (rs.next()) {
@@ -62,6 +62,23 @@ public class TablaRegistro {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 			return false;
+		}
+	}
+	
+	public String tipoEmpleado(String password, String nombreUsuario) {
+		//"update producto set disponible_pro ='"+ datoNuevo +"' where codbar_pro ='"+ codigo +"'";
+		String sql = "select cargo_emp from empleado e join registro r "
+				+ "on r.cve_emp = e.cve_emp where contraseña = (MD5('"+ password + "')) and nombreusuario = '"+ nombreUsuario +"'";
+		try {
+			ResultSet rs = statement.executeQuery(sql);
+			if (rs.next()) {
+				return rs.getString("cargo_emp");
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			return null;
 		}
 	}
 	

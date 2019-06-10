@@ -11,7 +11,28 @@ public class Producto {
 	private String presentacion;
 	private String marca;
 	private double precioVenta;
+	private int cantidadMinima;
+	private int cantidadMaxima;
+	private int disponible;
 	
+	public int getDisponible() {
+		return disponible;
+	}
+	public void setDisponible(int disponible) {
+		this.disponible = disponible;
+	}
+	public int getCantidadMinima() {
+		return cantidadMinima;
+	}
+	public void setCantidadMinima(int cantidadMinima) {
+		this.cantidadMinima = cantidadMinima;
+	}
+	public int getCantidadMaxima() {
+		return cantidadMaxima;
+	}
+	public void setCantidadMaxima(int cantidadMaxima) {
+		this.cantidadMaxima = cantidadMaxima;
+	}
 	public BigInteger getCodigoBarras() {
 		return codigoBarras;
 	}

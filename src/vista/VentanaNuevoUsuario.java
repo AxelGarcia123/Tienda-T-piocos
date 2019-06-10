@@ -69,7 +69,7 @@ public class VentanaNuevoUsuario extends JPanel implements ActionListener{
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(new Color(0, 60, 64));
 		add(panel_2, BorderLayout.CENTER);
-		panel_2.setLayout(new GridLayout(8, 2, 0, 20));
+		panel_2.setLayout(new GridLayout(8, 2, 0, 10));
 		
 		JLabel lblNombre = new JLabel("NOMBRE(S)");
 		lblNombre.setHorizontalAlignment(SwingConstants.CENTER);

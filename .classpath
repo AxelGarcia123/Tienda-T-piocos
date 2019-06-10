@@ -4,5 +4,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="libreria/mysql-connector-java-5.1.47-bin.jar"/>
 	<classpathentry kind="lib" path="libreria/RSCalendar.jar"/>
+	<classpathentry kind="lib" path="libreria/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="libreria/jfreechart-1.0.19.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
