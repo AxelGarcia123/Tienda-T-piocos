@@ -1,10 +1,12 @@
 package modelo;
 
+import java.sql.Date;
+
 public class DatosRenglonTicket {
 	private String nombreProducto;
 	private float cantidad;
 	private float precioVenta;
-	private String fechaVenta;
+	private Date fechaVenta;
 	private float totalVenta;
 	private String nombreEmpleado;
 	
@@ -30,10 +32,10 @@ public class DatosRenglonTicket {
 	public void setPrecioVenta(float precioVenta) {
 		this.precioVenta = precioVenta;
 	}
-	public String getFechaVenta() {
+	public Date getFechaVenta() {
 		return fechaVenta;
 	}
-	public void setFechaVenta(String fechaVenta) {
+	public void setFechaVenta(Date fechaVenta) {
 		this.fechaVenta = fechaVenta;
 	}
 	public float getTotalVenta() {

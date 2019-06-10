@@ -159,15 +159,31 @@ public class VentanaInventario extends JPanel implements ActionListener{
 		resurtir.setCodigoProducto(codigoBarras);
 		resurtir.setCantidadResurtirda(Integer.parseInt(editCantidad.getText()));
 		
-		String formatoFecha = "yyyy/MM/dd";
+		String formatoFecha = "yyyyMMdd";
 		Date fecha = editFechaResurtir.getDatoFecha();
-		SimpleDateFormat formateador = new SimpleDateFormat(formatoFecha);
 		
-		resurtir.setFechaResurtido(formateador.format(fecha));
-		resurtir.setPrecioUnidad(Float.parseFloat(editPrecioUnidad.getText()));
+		SimpleDateFormat formateador = new SimpleDateFormat(formatoFecha);
+		String prueba1 = String.valueOf(formateador.format(fecha));
 		
 		Date fechaCaducidad = editFechaCaducidad.getDatoFecha();
-		resurtir.setFechaCaducidad(formateador.format(fechaCaducidad));
+		String prueba2 = String.valueOf(formateador.format(fechaCaducidad));
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        Date parsed = null;
+        Date parsed2 = null;
+		try {
+			parsed = format.parse(prueba1);
+			parsed2 = format.parse(prueba2);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        java.sql.Date sql = new java.sql.Date(parsed.getTime());
+        java.sql.Date sql1 = new java.sql.Date(parsed2.getTime());
+		
+		resurtir.setFechaResurtido(sql);
+		resurtir.setPrecioUnidad(Float.parseFloat(editPrecioUnidad.getText()));
+		resurtir.setFechaCaducidad(sql1);
 
 		return resurtir;
 	}
@@ -179,9 +195,9 @@ public class VentanaInventario extends JPanel implements ActionListener{
 		DefaultTableModel modelo = new DefaultTableModel(titulos, 0);
 
 		for (Resurtir resurtir : resurtidos) {
-			String[] tupla = {tabla.nombreProducto(resurtir.getCodigoProducto()), resurtir.getFechaResurtido(), 
+			String[] tupla = {tabla.nombreProducto(resurtir.getCodigoProducto()), String.valueOf(resurtir.getFechaResurtido()), 
 					String.valueOf(resurtir.getCantidadResurtirda()), String.valueOf(resurtir.getPrecioUnidad()),
-					resurtir.getFechaCaducidad()};
+					String.valueOf(resurtir.getFechaCaducidad())};
 			modelo.addRow(tupla);
 		}
 		tablaResurtir.setModel(modelo);

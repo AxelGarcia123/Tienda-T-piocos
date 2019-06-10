@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import java.awt.GridLayout;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -236,8 +237,23 @@ public class VentanaVenta extends JPanel implements ActionListener {
 
 	public Ticket getTicket(int clave) {
 		Ticket ticket = new Ticket();
-		String fecha = eliminaContenido(datoFecha.getText(), " ");
-		ticket.setFecha(fecha);
+		String fechaDeVenta = eliminaContenido(datoFecha.getText(), " ");
+		
+		String formatoFecha = "yyyyMMdd";
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		Date date = new Date();
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        Date parsed = null;
+		try {
+			parsed = format.parse(dateFormat.format(date));
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        java.sql.Date sql = new java.sql.Date(parsed.getTime());
+		
+		ticket.setFecha(sql);
 		ticket.setTotal(Float.parseFloat(datoTotalAPagar.getText()));
 		ticket.setClaveEmpleado(clave);
 		return ticket;

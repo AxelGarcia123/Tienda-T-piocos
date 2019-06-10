@@ -72,10 +72,10 @@ public class TablaResurtir {
 			List<Resurtir> resurtidos = new ArrayList<>();
 			while (rs.next()) {
 				Resurtir resurtir = new Resurtir();
-				resurtir.setFechaResurtido(rs.getString("fecha_res"));
+				resurtir.setFechaResurtido(rs.getDate("fecha_res"));
 				resurtir.setCantidadResurtirda(Integer.parseInt(rs.getString("cant_res")));
 				resurtir.setPrecioUnidad(Float.parseFloat(rs.getString("ppu_res")));
-				resurtir.setFechaCaducidad(rs.getString("fechacad_res"));
+				resurtir.setFechaCaducidad(rs.getDate("fechacad_res"));
 				resurtir.setCodigoProducto(new BigInteger(rs.getString("codbar_pro")));
 				resurtidos.add(resurtir);
 			}

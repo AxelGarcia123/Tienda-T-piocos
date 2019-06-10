@@ -1,7 +1,9 @@
 package modelo;
 
+import java.sql.Date;
+
 public class Ticket {
-	private String fecha;
+	private Date fecha;
 	private float total;
 	private int claveEmpleado;
 	
@@ -9,10 +11,10 @@ public class Ticket {
 		
 	}
 	
-	public String getFecha() {
+	public Date getFecha() {
 		return fecha;
 	}
-	public void setFecha(String fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
 	public float getTotal() {

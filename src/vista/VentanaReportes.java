@@ -33,7 +33,7 @@ public class VentanaReportes extends JPanel {
 
 		for (DatosRenglonTicket datos: reportes) {
 			String[] tupla = {datos.getNombreProducto(), String.valueOf(datos.getCantidad()), 
-					String.valueOf(datos.getPrecioVenta()), datos.getFechaVenta(),
+					String.valueOf(datos.getPrecioVenta()), String.valueOf(datos.getFechaVenta()),
 					String.valueOf(datos.getTotalVenta()), datos.getNombreEmpleado()};
 			modelo.addRow(tupla);
 		}

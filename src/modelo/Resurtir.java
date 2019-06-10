@@ -1,13 +1,14 @@
 package modelo;
 
 import java.math.BigInteger;
+import java.sql.Date;
 
 public class Resurtir {
 	private BigInteger codigoProducto;
 	private int cantidadResurtirda;
-	private String fechaResurtido;
+	private Date fechaResurtido;
 	private float precioUnidad;
-	private String fechaCaducidad;
+	private Date fechaCaducidad;
 	
 	public Resurtir() {
 		
@@ -25,10 +26,10 @@ public class Resurtir {
 	public void setCantidadResurtirda(int cantidadResurtirda) {
 		this.cantidadResurtirda = cantidadResurtirda;
 	}
-	public String getFechaResurtido() {
+	public Date getFechaResurtido() {
 		return fechaResurtido;
 	}
-	public void setFechaResurtido(String fechaResurtido) {
+	public void setFechaResurtido(Date fechaResurtido) {
 		this.fechaResurtido = fechaResurtido;
 	}
 	public float getPrecioUnidad() {
@@ -37,10 +38,10 @@ public class Resurtir {
 	public void setPrecioUnidad(float precioUnidad) {
 		this.precioUnidad = precioUnidad;
 	}
-	public String getFechaCaducidad() {
+	public Date getFechaCaducidad() {
 		return fechaCaducidad;
 	}
-	public void setFechaCaducidad(String fechaCaducidad) {
+	public void setFechaCaducidad(Date fechaCaducidad) {
 		this.fechaCaducidad = fechaCaducidad;
 	}
 }
