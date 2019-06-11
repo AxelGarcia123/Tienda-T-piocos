@@ -1,5 +1,6 @@
 package modelo;
 
+import java.math.BigInteger;
 import java.sql.Date;
 
 public class DatosRenglonTicket {
@@ -10,7 +11,16 @@ public class DatosRenglonTicket {
 	private float totalVenta;
 	private String nombreEmpleado;
 	private int numeroTicket;
+	private BigInteger codigoBarra;
 	
+	public BigInteger getCodigoBarra() {
+		return codigoBarra;
+	}
+
+	public void setCodigoBarra(BigInteger codigoBarra) {
+		this.codigoBarra = codigoBarra;
+	}
+
 	public int getNumeroTicket() {
 		return numeroTicket;
 	}

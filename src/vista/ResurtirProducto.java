@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 
 public class ResurtirProducto extends JFrame implements ActionListener{
 
@@ -40,6 +41,7 @@ public class ResurtirProducto extends JFrame implements ActionListener{
 	private JLabel datoProducto;
 
 	public ResurtirProducto(String nombreProducto) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\iconos\\attachment_38986924.jpg"));
 		this.nombreProducto = nombreProducto;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 394, 502);

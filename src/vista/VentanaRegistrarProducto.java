@@ -205,11 +205,8 @@ public class VentanaRegistrarProducto extends JPanel implements ActionListener{
 		}
 		
 		if(e.getSource() == editProducto) {
-			if(editProducto.getSelectedItem().toString().equals("")) {
-				JOptionPane.showMessageDialog(null, "El campo no puede quedar vacio.", null, JOptionPane.ERROR_MESSAGE);
-			}
 			
-			else if(editProducto.getSelectedItem().toString() == "Otro") {
+			if(editProducto.getSelectedItem().toString() == "Otro") {
 				String datoNuevo = JOptionPane.showInputDialog(null, "Ingrese el nuevo dato:");
 				editProducto.addItem(datoNuevo);
 				editProducto.setSelectedItem(datoNuevo);
@@ -227,12 +224,8 @@ public class VentanaRegistrarProducto extends JPanel implements ActionListener{
 				editUnidadMedida.requestFocus();
 		}
 		
-		if(e.getSource() == editUnidadMedida) {
-			if(editUnidadMedida.getSelectedItem().toString().equals("")) {
-				JOptionPane.showMessageDialog(null, "El campo no puede quedar vacio.", null, JOptionPane.ERROR_MESSAGE);
-			}
-			
-			else if(editUnidadMedida.getSelectedItem().toString() == "Otro") {
+		if(e.getSource() == editUnidadMedida) {			
+			if(editUnidadMedida.getSelectedItem().toString() == "Otro") {
 				String datoNuevo = JOptionPane.showInputDialog(null, "Ingrese el nuevo dato:");
 				editUnidadMedida.addItem(datoNuevo);
 				editUnidadMedida.setSelectedItem(datoNuevo);
@@ -243,12 +236,8 @@ public class VentanaRegistrarProducto extends JPanel implements ActionListener{
 				editPresentacion.requestFocus();
 		}
 		
-		if(e.getSource() == editPresentacion) {
-			if(editPresentacion.getSelectedItem().toString().equals("")) {
-				JOptionPane.showMessageDialog(null, "El campo no puede quedar vacio.", null, JOptionPane.ERROR_MESSAGE);
-			}
-			
-			else if(editPresentacion.getSelectedItem().toString() == "Otro") {
+		if(e.getSource() == editPresentacion) {			
+			if(editPresentacion.getSelectedItem().toString() == "Otro") {
 				String datoNuevo = JOptionPane.showInputDialog(null, "Ingrese el nuevo dato:");
 				editPresentacion.addItem(datoNuevo);
 				editPresentacion.setSelectedItem(datoNuevo);
@@ -326,7 +315,7 @@ public class VentanaRegistrarProducto extends JPanel implements ActionListener{
 		List<String> dato = new ArrayList<String>();
 		datos.addItem("");
 		for (Producto producto : productos) {
-			dato.add(producto.getPresentacion());
+			dato.add(producto.getTipo());
 		}
 		
 		Set<String> hashSet = new HashSet<String>(dato);
@@ -344,7 +333,7 @@ public class VentanaRegistrarProducto extends JPanel implements ActionListener{
 		List<String> dato = new ArrayList<String>();
 		datos.addItem("");
 		for (Producto producto : productos) {
-			dato.add(producto.getPresentacion());
+			dato.add(producto.getUnidad());
 		}
 		
 		Set<String> hashSet = new HashSet<String>(dato);

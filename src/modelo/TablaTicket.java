@@ -35,7 +35,23 @@ public class TablaTicket {
 	}
 	
 	public int getCodigoTicket(float precio) {
-		String sql = "select folio_tic from ticket where total_tic='"+ precio + "'";
+		String sql = "select folio_tic from ticket where total_tic ='"+ precio + "'";
+		//select folio_tic from ticket where total_tic = 118.00;
+		try {
+			ResultSet rs = statement.executeQuery(sql);
+			if (rs.next()) {
+				return rs.getInt("folio_tic");
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			return 0;
+		}
+	}
+	
+	public int getDatosTicket() {
+		String sql = "select * from ticket";
 		try {
 			ResultSet rs = statement.executeQuery(sql);
 			if (rs.next()) {

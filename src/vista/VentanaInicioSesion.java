@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class VentanaInicioSesion extends JPanel implements ActionListener{
 	private JTextField editNombreUsuario;
@@ -30,11 +31,11 @@ public class VentanaInicioSesion extends JPanel implements ActionListener{
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0, 176, 225));
 		add(panel);
+		panel.setLayout(null);
 		
-		JLabel label = new JLabel("LOGOTIPO PENDIENTE");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setForeground(Color.WHITE);
-		label.setFont(new Font("Roboto", Font.PLAIN, 20));
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\iconos\\attachment_38986924.jpg"));
+		label.setBounds(38, 39, 204, 256);
 		panel.add(label);
 		
 		JPanel panel_1 = new JPanel();

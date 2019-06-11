@@ -72,7 +72,7 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 	}
 
 	public VentanaPrincipal1() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\iconos\\iconos-tienda-online_23-2147516201.jpg"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\iconos\\attachment_38986924.jpg"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 557, 380);
 		contentPane = new JPanel();
@@ -526,18 +526,15 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 				public void actionPerformed(ActionEvent e) {
 					if(!venta.datosVacios()) {
 						aux = true;
+						float total = venta.getTicket(tablaRegistro.getCodigoEmpleado(inicio.getNombreUsuario().getText())).getTotal();
 						tablaTicket.guardar(venta.getTicket(tablaRegistro.getCodigoEmpleado(inicio.getNombreUsuario().getText())));
 						datosTicket(venta.compras(), tablaTicket.getCodigoTicket(venta.totalPrecio()),tablaRegistro.getCodigoEmpleado(inicio.getNombreUsuario().getText()));
 						venta.mostrarCompras(venta.getNombre(), tablaProducto, aux);
 						venta.limpiar();
 						JOptionPane.showMessageDialog(null, "Compra hecha");
-						try {
-							venta.generarTicket();
-						} catch (FileNotFoundException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
 						aux = false;
+						venta.generarTicket(renglonTicket.getDatosTicketPrecio(total), total, tablaTicket.getCodigoTicket(total), "Casa Abdalá", renglonTicket.getDatosTicket(total));
+						venta.mostrarTicket(tablaTicket.getCodigoTicket(total));
 					}
 					else
 						JOptionPane.showMessageDialog(null, "No se han agregado compras.", null, JOptionPane.ERROR_MESSAGE);
@@ -732,6 +729,20 @@ public class VentanaPrincipal1 extends JFrame implements ActionListener{
 	}
 	
 	public void graficas() {
+		contentPane.removeAll();
+		reportes = null;
+		venta = null;
+		registroProducto = null;
+		ventanaInventario = null;
+		ventanaProducto = null;
+		registrarProducto = null;
+		productoD = null;
+		registroP = null;
+		grafica = null;
+		borrarMenu();
+		contentPane.add(titulo, BorderLayout.NORTH);
+		repaint();
+		
 		if(grafica == null) {
 			grafica = new VentanaGrafica();
 			

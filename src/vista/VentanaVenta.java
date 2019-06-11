@@ -22,22 +22,28 @@ import java.util.List;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.text.Document;
-import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import modelo.Compra;
+import modelo.DatosRenglonTicket;
 import modelo.Producto;
 import modelo.RenglonTicket;
 import modelo.TablaProducto;
 import modelo.Ticket;
 
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.Desktop;
+
 import javax.swing.border.LineBorder;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -395,19 +401,38 @@ public class VentanaVenta extends JPanel implements ActionListener {
 		total = 0;
 	}
 	
-	public static void generarTicket(List<RenglonTicket> list,double total) {
+	public void generarTicket(List<DatosRenglonTicket> list, float total, int ticket, String tienda, DatosRenglonTicket datosTicket) {
 		Document documento = new Document();
-
 		FileOutputStream ficheroPdf;
 		try {
-			ficheroPdf = new FileOutputStream("ticket.pdf");
+			ficheroPdf = new FileOutputStream("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\ticket"+ ticket +".pdf");
 			PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(20);
 			documento.open();
-			for (RenglonTicket r : list) {
-				documento.add(new Paragraph(r.getCodigoBarra()+"          "+r.getCantidad()));
+			Paragraph encabezado = new Paragraph(); 
+			encabezado.add("Tienda:                                                                                                 "+ tienda + "\n");
+			encabezado.add("N\u00famero de ticket                                                                                                 "+ datosTicket.getNumeroTicket()+ "\n");
+			encabezado.add("Fehca                                                                                                 "+ datosTicket.getFechaVenta()+ "\n");
+			encabezado.add("Atendido por:                                                                                                 "+ datosTicket.getNombreEmpleado()+ "\n\n");
+			
+			Paragraph tipo = new Paragraph();
+			tipo.add("\nC\u00f3digo de Barras            Producto            Cantidad            P\u00e9cio de Venta            Total\n");
+			tipo.add("-------------------------------------------------------------------------------------------------------------------\n\n");
+			Paragraph preface = new Paragraph();
+			
+			for (DatosRenglonTicket r : list) {
+				preface.add(r.getCodigoBarra()+"           "+ r.getNombreProducto() +"          "
+			+r.getCantidad() + "          "+ r.getPrecioVenta() + "          " + (r.getCantidad() * r.getPrecioVenta()) + "\n");
+				preface.add("------------------------------------------------------------------------------------------------------\n");
 
 			}
-			documento.add(new Paragraph("\nTotal:         "+total));
+			Paragraph totalAPagar = new Paragraph(); 
+			totalAPagar.add("            \n\nTotal:         "+ total);
+			preface.setAlignment(Element.ALIGN_CENTER);
+			tipo.setAlignment(Element.ALIGN_CENTER);
+			documento.add(encabezado);
+			documento.add(tipo);
+			documento.add(preface);
+			documento.add(totalAPagar);
 			documento.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -415,12 +440,13 @@ public class VentanaVenta extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void generarTicket() throws FileNotFoundException {
-		PdfWriter writer = new PdfWriter("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\Ticket.pdf");
-		PdfDocument document = new PdfDocument(writer);
-		// Se crea el documento
-		Document documento = new Document(document);
-		documento.add(new Paragraph("Hola mundo"));
-		documento.close();
+	public void mostrarTicket(int ticket){
+		File archivo = new File("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\ticket"+ ticket +".pdf");
+		try {
+			Desktop.getDesktop().open(archivo);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

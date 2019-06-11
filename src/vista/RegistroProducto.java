@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import java.awt.Toolkit;
 
 public class RegistroProducto extends JFrame implements ActionListener{
 
@@ -53,6 +54,7 @@ public class RegistroProducto extends JFrame implements ActionListener{
 	}
 
 	public RegistroProducto() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\iconos\\attachment_38986924.jpg"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 550);
 		contentPane = new JPanel();

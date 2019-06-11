@@ -20,7 +20,6 @@ import java.awt.Color;
 
 public class VentanaReportes extends JPanel {
 	private JTable tablaReportes;
-	private JButton botonVerTicket;
 
 	public VentanaReportes() {
 		setLayout(new BorderLayout(0, 0));
@@ -31,16 +30,6 @@ public class VentanaReportes extends JPanel {
 		tablaReportes = new JTable();
 		tablaReportes.setFont(new Font("Roboto", Font.PLAIN, 17));
 		scrollPane.setViewportView(tablaReportes);
-		
-		JPanel panel = new JPanel();
-		add(panel, BorderLayout.SOUTH);
-		
-		botonVerTicket = new JButton("Ver Ticket");
-		botonVerTicket.setForeground(Color.WHITE);
-		botonVerTicket.setFont(new Font("Roboto", Font.PLAIN, 15));
-		botonVerTicket.setBorderPainted(false);
-		botonVerTicket.setBackground(new Color(155, 38, 182));
-		panel.add(botonVerTicket);
 	}
 	
 	public void mostrarReportes(List<DatosRenglonTicket> reportes) {

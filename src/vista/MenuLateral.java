@@ -26,11 +26,10 @@ public class MenuLateral extends JPanel {
 	private JLabel datoNombreEmpleado;
 	private JButton botonRegistrarProducto;
 	private JButton botonGraficas;
-	private JButton botonReportes;
 	
 	public MenuLateral() {
 		setBackground(new Color(158, 38, 182));
-		setLayout(new GridLayout(10, 0, 0, 25));
+		setLayout(new GridLayout(9, 0, 0, 25));
 		
 		panel = new JPanel();
 		panel.setBackground(new Color(158, 38, 182));
@@ -126,15 +125,6 @@ public class MenuLateral extends JPanel {
 		botonInicio.setForeground(Color.WHITE);
 		botonInicio.setFont(new Font("Roboto", Font.PLAIN, 15));
 		add(botonInicio);
-		
-		botonReportes = new JButton("Reportes");
-		botonReportes.setForeground(Color.WHITE);
-		botonReportes.setFont(new Font("Roboto", Font.PLAIN, 15));
-		botonReportes.setIcon(new ImageIcon("C:\\Users\\bryangarcia\\Desktop\\POO\\Eclipse\\Tienda\\iconos\\icons8-historial-de-pedidos-50.png"));
-		botonReportes.setContentAreaFilled(false);
-		botonReportes.setBorderPainted(false);
-		botonReportes.setHorizontalAlignment(SwingConstants.LEFT);
-		add(botonReportes);
 	}
 	
 	public JButton getVentas() {

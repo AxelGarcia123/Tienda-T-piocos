@@ -24,8 +24,8 @@ public class TablaRegistro {
 	}
 	
 	public String guardar(Registro registro) {
-		String sql = "insert into registro values(null,'" + registro.getNombreUsuario() + "','" + registro.getCorreoElectronico() + "','" + 
-				registro.getPassword() + "','" + registro.getClaveEmpleado() + "')";
+		String sql = "insert into registro values(null,'" + registro.getNombreUsuario() + "','" + registro.getCorreoElectronico() + "', MD5('" + 
+				registro.getPassword() + "'),'" + registro.getClaveEmpleado() + "')";
 		try {
 			statement.executeUpdate(sql);
 			return "Producto registrado";
